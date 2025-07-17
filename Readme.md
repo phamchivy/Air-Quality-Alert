@@ -82,5 +82,5 @@ Air-quality-alert/
 
 **Author:**  
 Team: Discord Football Team
-Captain: Phạm Chí Vỹ - HUST
-Member: Phùng Trọng Duy - HUMG
+- Captain: Phạm Chí Vỹ - HUST
+- Member: Phùng Trọng Duy - HUMG
