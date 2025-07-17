@@ -1,0 +1,32 @@
+
+ESP32 DEPLOYMENT INSTRUCTIONS
+=============================
+
+FILES TO UPLOAD TO ESP32:
+1. esp32_aqi_model.tflite (3.0 KB) - TensorFlow Lite model
+2. esp32_test_data.csv - Test data without AQI labels
+3. esp32_aqi_model.h - C++ header with parameters
+
+ARDUINO LIBRARIES NEEDED:
+- WiFi (built-in)
+- HTTPClient (built-in)  
+- ArduinoJson
+- TensorFlowLite_ESP32
+
+HARDWARE REQUIREMENTS:
+- ESP32 with >= 4MB Flash
+- microSD card module (optional, for CSV storage)
+- WiFi connection for Telegram
+
+MODEL PERFORMANCE:
+- Training MAE: 3.01
+- Test MAE: 3.08
+- R² Score: 0.947
+- Model Size: 3.0 KB
+
+NEXT STEPS:
+1. Upload files to ESP32 via SD card or SPIFFS
+2. Configure WiFi and Telegram credentials
+3. Flash ESP32 inference code
+4. ESP32 will load model and predict AQI for test data
+5. Results sent to Telegram automatically

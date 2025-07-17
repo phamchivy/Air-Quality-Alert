@@ -1,0 +1,387 @@
+2025-07-16 22:22:07.018237: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+🚀 PC Training for ESP32 AQI Prediction
+==================================================
+
+📊 STEP 1: Loading training data...
+✅ Loaded 1080 samples
+📋 Columns: ['aqi', 'pm25', 'pm10', 'co', 'no2', 'o3', 't', 'h', 'p', 'w', 'temp_sensor', 'humidity_sensor', 'mq135_raw']
+
+🔧 STEP 2: Feature engineering...
+📝 Features: ['temp_sensor', 'humidity_sensor', 'mq135_raw', 'mq135_normalized', 'temp_diff', 'humidity_diff', 'comfort_index', 'pm_ratio']
+📊 Clean dataset: 1080 samples, 8 features
+📈 AQI range: 37.0 - 95.0
+
+📋 STEP 3: Train/Test split...
+🏋️ Training: 864 samples
+🧪 Testing: 216 samples
+
+📏 STEP 4: Feature scaling...
+✅ Features normalized
+📊 Mean: [ 3.35100694e+01  6.85751157e+01  8.07055556e+02  1.97083164e+01
+  3.89699074e-01 -5.02847222e+00  4.03675810e+01  1.19997926e+00]
+📊 Scale: [1.29736181e-01 2.85763655e-01 1.26357450e+02 3.08565202e+00
+ 6.45513650e-01 2.50501340e+00 1.14094890e-01 5.44586300e-06]
+
+🤖 STEP 5: Building TensorFlow model...
+C:\Users\DELL\AppData\Local\Programs\Python\Python312\Lib\site-packages\keras\src\layers\core\dense.py:87: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(activity_regularizer=activity_regularizer, **kwargs)
+2025-07-16 22:22:16.281380: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+📋 Model architecture:
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ dense (Dense)                        │ (None, 16)                  │             144 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 16)                  │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 8)                   │             136 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_2 (Dense)                      │ (None, 1)                   │               9 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 289 (1.13 KB)
+ Trainable params: 289 (1.13 KB)
+ Non-trainable params: 0 (0.00 B)
+
+🏋️ STEP 6: Training model...
+Epoch 1/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 2s 12ms/step - loss: 4040.7964 - mae: 61.6908 - val_loss: 3952.2009 - val_mae: 61.0068
+Epoch 2/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 3940.7249 - mae: 60.8904 - val_loss: 3844.3838 - val_mae: 60.1810
+Epoch 3/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 3854.9260 - mae: 60.4346 - val_loss: 3654.6794 - val_mae: 58.6658
+Epoch 4/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 3621.6794 - mae: 58.5251 - val_loss: 3353.0603 - val_mae: 56.1355
+Epoch 5/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 3160.3562 - mae: 54.3796 - val_loss: 2889.8594 - val_mae: 51.9466
+Epoch 6/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 2652.8423 - mae: 49.2250 - val_loss: 2290.0928 - val_mae: 45.7501
+Epoch 7/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 1s 7ms/step - loss: 2134.4104 - mae: 43.5385 - val_loss: 1661.8303 - val_mae: 37.9601
+Epoch 8/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 1542.1959 - mae: 35.8713 - val_loss: 1161.3264 - val_mae: 31.8539
+Epoch 9/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 1129.9651 - mae: 30.4672 - val_loss: 830.1860 - val_mae: 26.9994
+Epoch 10/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 893.7549 - mae: 26.8764 - val_loss: 649.4023 - val_mae: 23.6318
+Epoch 11/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 760.1217 - mae: 23.6901 - val_loss: 542.1358 - val_mae: 21.1116
+Epoch 12/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 669.7990 - mae: 22.7389 - val_loss: 477.5681 - val_mae: 19.4237
+Epoch 13/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 618.4719 - mae: 21.6787 - val_loss: 415.2560 - val_mae: 17.7212
+Epoch 14/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 616.5934 - mae: 21.6314 - val_loss: 382.7062 - val_mae: 17.0199
+Epoch 15/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 567.5413 - mae: 20.2496 - val_loss: 333.6920 - val_mae: 15.7519
+Epoch 16/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 511.6083 - mae: 19.4574 - val_loss: 294.6035 - val_mae: 14.6899
+Epoch 17/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 475.1526 - mae: 18.8301 - val_loss: 262.3970 - val_mae: 13.8036
+Epoch 18/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 432.2395 - mae: 17.5420 - val_loss: 232.8765 - val_mae: 12.9190
+Epoch 19/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 418.6792 - mae: 17.4016 - val_loss: 204.4051 - val_mae: 11.9989
+Epoch 20/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 365.3329 - mae: 16.2522 - val_loss: 174.9393 - val_mae: 11.0023
+Epoch 21/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 336.4064 - mae: 15.3502 - val_loss: 152.2100 - val_mae: 10.2299
+Epoch 22/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 311.1009 - mae: 14.7511 - val_loss: 132.2520 - val_mae: 9.4713
+Epoch 23/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 310.6589 - mae: 14.5696 - val_loss: 118.1612 - val_mae: 8.8622
+Epoch 24/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 278.6268 - mae: 13.9026 - val_loss: 104.1425 - val_mae: 8.2735
+Epoch 25/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 316.9760 - mae: 14.5112 - val_loss: 93.5849 - val_mae: 7.8218
+Epoch 26/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 273.1080 - mae: 13.3001 - val_loss: 85.0497 - val_mae: 7.4444
+Epoch 27/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 266.8826 - mae: 13.1399 - val_loss: 75.2228 - val_mae: 6.9058
+Epoch 28/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 215.9438 - mae: 11.7695 - val_loss: 71.6768 - val_mae: 6.7562
+Epoch 29/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 251.7626 - mae: 12.9795 - val_loss: 65.5372 - val_mae: 6.3806
+Epoch 30/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 222.1383 - mae: 12.0359 - val_loss: 57.6098 - val_mae: 5.9238
+Epoch 31/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 207.8298 - mae: 11.6272 - val_loss: 56.5379 - val_mae: 5.8216
+Epoch 32/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 213.8477 - mae: 11.9135 - val_loss: 54.5773 - val_mae: 5.7171
+Epoch 33/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 177.9409 - mae: 10.5162 - val_loss: 50.1686 - val_mae: 5.4237
+Epoch 34/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 201.5764 - mae: 11.2094 - val_loss: 45.9005 - val_mae: 5.1222
+Epoch 35/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 171.0478 - mae: 10.4711 - val_loss: 46.1097 - val_mae: 5.1367
+Epoch 36/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 180.0003 - mae: 10.4579 - val_loss: 45.2144 - val_mae: 5.0631
+Epoch 37/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 191.2623 - mae: 10.7893 - val_loss: 39.1102 - val_mae: 4.6402
+Epoch 38/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 190.2654 - mae: 11.0325 - val_loss: 37.8088 - val_mae: 4.5671
+Epoch 39/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 199.0659 - mae: 11.1781 - val_loss: 38.7155 - val_mae: 4.6479
+Epoch 40/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 179.3889 - mae: 10.3459 - val_loss: 35.7071 - val_mae: 4.4409
+Epoch 41/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 188.2042 - mae: 10.9102 - val_loss: 35.4324 - val_mae: 4.4493
+Epoch 42/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 157.9006 - mae: 10.0002 - val_loss: 29.9183 - val_mae: 3.9916
+Epoch 43/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 177.2504 - mae: 10.3454 - val_loss: 28.8393 - val_mae: 3.9043
+Epoch 44/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 165.0508 - mae: 10.3228 - val_loss: 29.2147 - val_mae: 3.9437
+Epoch 45/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 172.8537 - mae: 10.4146 - val_loss: 31.6436 - val_mae: 4.2227
+Epoch 46/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 160.7138 - mae: 9.9996 - val_loss: 27.3311 - val_mae: 3.8443
+Epoch 47/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 162.0940 - mae: 9.8838 - val_loss: 26.7908 - val_mae: 3.8129
+Epoch 48/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 158.2731 - mae: 10.0183 - val_loss: 26.8321 - val_mae: 3.8242
+Epoch 49/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 154.8346 - mae: 9.9896 - val_loss: 26.7892 - val_mae: 3.8494
+Epoch 50/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 165.4376 - mae: 10.1541 - val_loss: 26.1900 - val_mae: 3.7541
+Epoch 51/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 170.6280 - mae: 10.1225 - val_loss: 26.6884 - val_mae: 3.8980
+Epoch 52/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 167.9760 - mae: 10.0235 - val_loss: 26.5309 - val_mae: 3.9127
+Epoch 53/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 163.1363 - mae: 10.1318 - val_loss: 22.7010 - val_mae: 3.4649
+Epoch 54/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 141.5578 - mae: 9.5479 - val_loss: 19.8780 - val_mae: 3.1312
+Epoch 55/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 159.7528 - mae: 9.8352 - val_loss: 21.4359 - val_mae: 3.3710
+Epoch 56/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 153.9447 - mae: 9.7570 - val_loss: 18.6752 - val_mae: 3.0242
+Epoch 57/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 139.3962 - mae: 9.2179 - val_loss: 18.8155 - val_mae: 3.1220
+Epoch 58/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 134.0183 - mae: 8.9111 - val_loss: 19.5041 - val_mae: 3.2609
+Epoch 59/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 130.2272 - mae: 8.9600 - val_loss: 19.4167 - val_mae: 3.2706
+Epoch 60/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 174.5022 - mae: 10.0447 - val_loss: 18.4779 - val_mae: 3.1058
+Epoch 61/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 139.2223 - mae: 9.4663 - val_loss: 17.1845 - val_mae: 2.9647
+Epoch 62/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 162.2135 - mae: 9.8915 - val_loss: 16.1026 - val_mae: 2.7729
+Epoch 63/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 157.4444 - mae: 9.5876 - val_loss: 16.1181 - val_mae: 2.8347
+Epoch 64/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 135.6201 - mae: 9.0675 - val_loss: 14.6740 - val_mae: 2.6101
+Epoch 65/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 124.2637 - mae: 8.5958 - val_loss: 12.5365 - val_mae: 2.3358
+Epoch 66/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 146.4025 - mae: 9.6072 - val_loss: 15.9132 - val_mae: 2.8641
+Epoch 67/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 142.4518 - mae: 9.4234 - val_loss: 15.8320 - val_mae: 2.8956
+Epoch 68/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 135.0630 - mae: 9.1848 - val_loss: 15.6266 - val_mae: 2.9015
+Epoch 69/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 128.2115 - mae: 8.9782 - val_loss: 15.6549 - val_mae: 2.8989
+Epoch 70/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 142.6151 - mae: 9.1535 - val_loss: 14.5000 - val_mae: 2.7406
+Epoch 71/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 115.2993 - mae: 8.4595 - val_loss: 15.8282 - val_mae: 3.0120
+Epoch 72/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 8ms/step - loss: 135.1977 - mae: 9.2101 - val_loss: 14.3525 - val_mae: 2.8019
+Epoch 73/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 128.3979 - mae: 8.5897 - val_loss: 11.7664 - val_mae: 2.3754
+Epoch 74/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 145.4399 - mae: 9.2767 - val_loss: 13.0289 - val_mae: 2.6548
+Epoch 75/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 131.5340 - mae: 8.8448 - val_loss: 12.0220 - val_mae: 2.4448
+Epoch 76/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 9ms/step - loss: 126.1007 - mae: 8.9016 - val_loss: 11.0907 - val_mae: 2.2471
+Epoch 77/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 140.6075 - mae: 9.0948 - val_loss: 11.7420 - val_mae: 2.3786
+Epoch 78/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 139.1758 - mae: 9.0375 - val_loss: 11.3162 - val_mae: 2.3155
+Epoch 79/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 132.7583 - mae: 8.9323 - val_loss: 12.9008 - val_mae: 2.6731
+Epoch 80/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 131.7023 - mae: 8.8967 - val_loss: 11.8107 - val_mae: 2.4581
+Epoch 81/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 119.5303 - mae: 8.5371 - val_loss: 9.3766 - val_mae: 2.0608
+Epoch 82/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 117.8099 - mae: 8.4171 - val_loss: 10.3562 - val_mae: 2.2472
+Epoch 83/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 118.3368 - mae: 8.4188 - val_loss: 9.9143 - val_mae: 2.1842
+Epoch 84/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 7ms/step - loss: 134.1134 - mae: 9.3056 - val_loss: 11.5508 - val_mae: 2.5825
+Epoch 85/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 105.8149 - mae: 7.9712 - val_loss: 9.8728 - val_mae: 2.1838
+Epoch 86/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 110.0621 - mae: 8.2608 - val_loss: 13.4617 - val_mae: 2.8930
+Epoch 87/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 135.2444 - mae: 9.2763 - val_loss: 8.6946 - val_mae: 2.0268
+Epoch 88/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 104.8927 - mae: 8.1282 - val_loss: 10.4957 - val_mae: 2.3949
+Epoch 89/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 4ms/step - loss: 108.2734 - mae: 8.3141 - val_loss: 8.6976 - val_mae: 2.0476
+Epoch 90/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 130.6933 - mae: 8.9269 - val_loss: 9.7870 - val_mae: 2.3176
+Epoch 91/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 126.4966 - mae: 8.5143 - val_loss: 9.7477 - val_mae: 2.3504
+Epoch 92/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 122.9933 - mae: 8.7084 - val_loss: 8.8824 - val_mae: 2.1661
+Epoch 93/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 125.6255 - mae: 8.9505 - val_loss: 8.7054 - val_mae: 2.0996
+Epoch 94/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 115.3423 - mae: 8.2184 - val_loss: 10.3620 - val_mae: 2.4782
+Epoch 95/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 115.8806 - mae: 8.3769 - val_loss: 8.4029 - val_mae: 2.0691
+Epoch 96/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 125.2714 - mae: 8.6949 - val_loss: 10.8636 - val_mae: 2.5417
+Epoch 97/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 119.2173 - mae: 8.4563 - val_loss: 9.6593 - val_mae: 2.4004
+Epoch 98/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 104.2915 - mae: 7.8552 - val_loss: 7.0241 - val_mae: 1.8157
+Epoch 99/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 119.4342 - mae: 8.4162 - val_loss: 11.8289 - val_mae: 2.8632
+Epoch 100/100
+44/44 ━━━━━━━━━━━━━━━━━━━━ 0s 5ms/step - loss: 110.5992 - mae: 8.3300 - val_loss: 9.7358 - val_mae: 2.3956
+
+📊 STEP 7: Model evaluation...
+27/27 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step 
+7/7 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+✅ Training MAE: 2.38, R²: 0.960
+✅ Test MAE: 2.36, R²: 0.964
+
+🔄 STEP 8: Converting to TensorFlow Lite...
+Saved artifact at 'C:\Users\DELL\AppData\Local\Temp\tmpqi53nxwz'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 8), dtype=tf.float32, name='keras_tensor')
+Output Type:
+  TensorSpec(shape=(None, 1), dtype=tf.float32, name=None)
+Captures:
+  2003425942352: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2003425943120: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2003425944464: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2003425942544: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2003425943504: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2003425945040: TensorSpec(shape=(), dtype=tf.resource, name=None)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1752679372.825424   20848 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1752679372.825883   20848 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+2025-07-16 22:22:52.826888: I tensorflow/cc/saved_model/reader.cc:83] Reading SavedModel from: C:\Users\DELL\AppData\Local\Temp\tmpqi53nxwz
+2025-07-16 22:22:52.828308: I tensorflow/cc/saved_model/reader.cc:52] Reading meta graph with tags { serve }
+2025-07-16 22:22:52.828528: I tensorflow/cc/saved_model/reader.cc:147] Reading SavedModel debug info (if present) from: C:\Users\DELL\AppData\Local\Temp\tmpqi53nxwz
+I0000 00:00:1752679372.835602   20848 mlir_graph_optimization_pass.cc:435] MLIR V1 optimization pass is not enabled
+2025-07-16 22:22:52.839423: I tensorflow/cc/saved_model/loader.cc:236] Restoring SavedModel bundle.
+2025-07-16 22:22:52.903080: I tensorflow/cc/saved_model/loader.cc:220] Running initialization op on SavedModel bundle at path: C:\Users\DELL\AppData\Local\Temp\tmpqi53nxwz
+2025-07-16 22:22:52.914981: I tensorflow/cc/saved_model/loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 88107 microseconds.
+2025-07-16 22:22:52.944936: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+✅ TensorFlow Lite model created
+📏 Model size: 3.2 KB
+
+💾 STEP 9: Saving files for ESP32...
+✅ Saved: esp32_deployment/esp32_aqi_model.tflite
+✅ Saved: esp32_deployment/scaler_params.json
+✅ Saved: esp32_deployment/esp32_aqi_model.h
+⚠️ esp32_test_data.csv not found - generate it first!
+
+🧪 STEP 10: Testing TFLite model...
+C:\Users\DELL\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+📏 Model size: 3.2 KB
+
+💾 STEP 9: Saving files for ESP32...
+✅ Saved: esp32_deployment/esp32_aqi_model.tflite
+✅ Saved: esp32_deployment/scaler_params.json
+✅ Saved: esp32_deployment/esp32_aqi_model.h
+⚠️ esp32_test_data.csv not found - generate it first!
+
+🧪 STEP 10: Testing TFLite model...
+C:\Users\DELL\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+💾 STEP 9: Saving files for ESP32...
+✅ Saved: esp32_deployment/esp32_aqi_model.tflite
+✅ Saved: esp32_deployment/scaler_params.json
+✅ Saved: esp32_deployment/esp32_aqi_model.h
+⚠️ esp32_test_data.csv not found - generate it first!
+
+🧪 STEP 10: Testing TFLite model...
+C:\Users\DELL\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+✅ Saved: esp32_deployment/esp32_aqi_model.h
+⚠️ esp32_test_data.csv not found - generate it first!
+
+🧪 STEP 10: Testing TFLite model...
+C:\Users\DELL\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+🔍 Sample test:
+📋 TFLite input shape: [1 8]
+📋 TFLite output shape: [1 1]
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+🔍 Sample test:
+   Keras prediction: 63.8
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+🔍 Sample test:
+   Keras prediction: 63.8
+🔍 Sample test:
+   Keras prediction: 63.8
+   Keras prediction: 63.8
+   TFLite prediction: 63.8
+   Difference: 0.001
+✅ Saved: esp32_deployment/deployment_instructions.txt
+
+🎉 TRAINING COMPLETED SUCCESSFULLY!
+==================================================
+📁 All files saved in: esp32_deployment/
+📊 Model performance: MAE=2.36, R²=0.964
+📏 Model size: 3.2 KB (suitable for ESP32)
+
+🚀 Ready for ESP32 deployment!
